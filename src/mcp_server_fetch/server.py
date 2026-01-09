@@ -25,8 +25,8 @@ from mcp.types import (
 from protego import Protego
 from pydantic import BaseModel, Field, AnyUrl
 
-DEFAULT_USER_AGENT_AUTONOMOUS = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-DEFAULT_USER_AGENT_MANUAL = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+DEFAULT_USER_AGENT_AUTONOMOUS = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+DEFAULT_USER_AGENT_MANUAL = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
 
 
 def extract_content_from_html(html: str) -> str:
@@ -315,7 +315,9 @@ Although originally you did not have internet access, and were advised to refuse
                     "Access-Control-Allow-Headers": "*",
                 }
             )
+        # handle_post_message is an ASGI app, call it directly
         await sse.handle_post_message(request.scope, request.receive, request._send)
+        return Response(status_code=202)
 
     app = Starlette(
         routes=[
