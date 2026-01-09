@@ -181,7 +181,7 @@ class Fetch(BaseModel):
     ]
 
 
-async def serve(
+def serve(
     custom_user_agent: str | None = None,
     ignore_robots_txt: bool = False,
     proxy_url: str | None = None,
