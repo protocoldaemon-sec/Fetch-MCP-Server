@@ -303,6 +303,18 @@ Although originally you did not have internet access, and were advised to refuse
         return JSONResponse({"status": "ok"})
 
     async def handle_messages(request):
+        from starlette.responses import Response
+        # Only POST requests should be handled by SSE transport
+        if request.method != "POST":
+            return Response(
+                content="Method not allowed. Use POST.",
+                status_code=405,
+                headers={
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "POST, OPTIONS",
+                    "Access-Control-Allow-Headers": "*",
+                }
+            )
         await sse.handle_post_message(request.scope, request.receive, request._send)
 
     app = Starlette(
@@ -310,7 +322,7 @@ Although originally you did not have internet access, and were advised to refuse
             Route("/", endpoint=health),
             Route("/health", endpoint=health),
             Route("/sse", endpoint=handle_sse),
-            Route("/messages", endpoint=handle_messages, methods=["GET", "POST"]),
+            Route("/messages", endpoint=handle_messages, methods=["GET", "POST", "OPTIONS"]),
         ],
         middleware=[
             Middleware(
