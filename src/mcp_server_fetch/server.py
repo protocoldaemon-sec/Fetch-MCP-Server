@@ -445,6 +445,20 @@ Use this tool when you need to find current information, research topics, or dis
     sse = SseServerTransport("/messages")
 
     async def handle_sse(request):
+        from starlette.responses import Response
+        
+        # Handle CORS preflight
+        if request.method == "OPTIONS":
+            return Response(
+                status_code=200,
+                headers={
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                    "Access-Control-Allow-Headers": "*",
+                    "Access-Control-Allow-Credentials": "false",
+                }
+            )
+        
         async with sse.connect_sse(
             request.scope, request.receive, request._send
         ) as streams:
@@ -477,7 +491,7 @@ Use this tool when you need to find current information, research topics, or dis
         routes=[
             Route("/", endpoint=health),
             Route("/health", endpoint=health),
-            Route("/sse", endpoint=handle_sse),
+            Route("/sse", endpoint=handle_sse, methods=["GET", "OPTIONS"]),
             Route("/messages", endpoint=handle_messages, methods=["GET", "POST", "OPTIONS"]),
         ],
         middleware=[

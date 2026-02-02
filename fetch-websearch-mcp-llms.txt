@@ -1,5 +1,7 @@
 # MCP Server: Fetch & Web Search
 
+BASE_URL = https://fetch-mcp-server-production-666.up.railway.app
+
 ## Overview
 MCP server yang menyediakan tools untuk fetching konten web dan web search. Server ini menggunakan DuckDuckGo untuk search (gratis unlimited) dan mendukung berbagai metode fetching dengan anti-blocking features.
 
